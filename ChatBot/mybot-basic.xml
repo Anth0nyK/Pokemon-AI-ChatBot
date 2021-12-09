@@ -1,0 +1,70 @@
+<aiml version="1.0.1" encoding="UTF-8">
+
+<!-- Greetings and Politeness -->
+<category> <pattern> HELLO </pattern>
+  <template>Hello! How are you?</template> </category>
+
+<category> <pattern> HELLO * </pattern>
+  <template><srai>HELLO</srai></template> </category>
+
+<category> <pattern> HI </pattern>
+  <template><srai>HELLO</srai></template> </category>
+
+<category> <pattern> HI * </pattern>
+  <template><srai>HELLO</srai></template> </category>
+
+<category> <pattern> HOW ARE YOU </pattern>
+  <template>I'm functioning within normal parameters, thanks for asking.</template></category>
+
+<category><pattern> I AM FINE </pattern>
+  <template>That's good to know. What would you like to discuss about?</template></category>
+
+<category><pattern> BYE </pattern>
+  <template>#0$Bye! Nice talking to you. You take care now.</template></category>
+
+<category><pattern> GOODBYE </pattern>
+  <template><srai>BYE</srai></template></category>
+
+<category><pattern> EXIT </pattern>
+  <template><srai>BYE</srai></template></category>
+
+<category> <pattern> THANKS </pattern>
+  <template>You are welcome.</template></category>
+
+<category> <pattern> THANK YOU </pattern>
+  <template><srai>THANKS</srai></template></category>
+
+<category> <pattern> CHEERS </pattern>
+  <template>Sure mate.</template></category>
+
+<category> <pattern> CHEERS * </pattern>
+  <template>Sure mate.</template></category>
+
+<!-- Weather API -->
+<category><pattern> WHAT IS THE WEATHER LIKE IN * </pattern>
+  <template>#2$<star/></template></category>
+
+<category><pattern> HOW IS THE WEATHER IN * </pattern>
+  <template><srai>WHAT IS THE WEATHER LIKE IN <star/></srai></template></category>
+
+<!--- Wikipedia API -->
+<category><pattern> WHAT IS A * </pattern>
+  <template>#1$<star index="1"/></template></category>
+
+<category><pattern> WHAT IS AN * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+
+<category><pattern> WHAT IS * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+
+<category><pattern> DEFINE * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+
+<category><pattern> WHO IS * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+
+<!-- Default reaction -->
+<category><pattern> * </pattern>
+  <template>#99$<star index="1"/></template></category>
+
+</aiml>
