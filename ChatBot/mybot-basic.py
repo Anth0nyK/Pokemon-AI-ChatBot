@@ -21,10 +21,34 @@ APIkey = "5403a1e0442ce1dd18cb1bf7c40e776f"
 import aiml
 # Create a Kernel object. No string encoding (all I/O is unicode)
 
+
+
+#######################################################
+#  Initialise NLTK Inference
+#######################################################
+from nltk.sem import Expression
+from nltk.inference import ResolutionProver
+read_expr = Expression.fromstring
+
+#######################################################
+#  Initialise Knowledgebase. 
+#######################################################
+import pandas
+kb=[]
+data = pandas.read_csv('kb.csv', header=None)
+[kb.append(read_expr(row)) for row in data[0]]
+# >>> ADD SOME CODES here for checking KB integrity (no contradiction), 
+# otherwise show an error message and terminate
+
+
+
+
 import csv
 import math
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+
+
 
 def getAlluniqueWords(rows, wordsInyourLine):
     
@@ -38,6 +62,7 @@ def getAlluniqueWords(rows, wordsInyourLine):
     
     #print(allWords)
     return allWords
+
 
 
 def tf_function(wordsInYourLine):
@@ -135,7 +160,7 @@ kern.setTextEncoding(None)
 # The optional commands argument is a command (or list of commands)
 # to run after the files are loaded.
 # The optional brainFile argument specifies a brain file to load.
-kern.bootstrap(learnFiles="mybot-basic.xml")
+kern.bootstrap(learnFiles="mybot-logic.xml")
 #######################################################
 # Welcome user
 #######################################################
@@ -164,12 +189,14 @@ while True:
         if cmd == 0:
             print(params[1])
             break
+        
         elif cmd == 1:
             try:
                 wSummary = wikipedia.summary(params[1], sentences=3,auto_suggest=False)
                 print(wSummary)
             except:
                 print("Sorry, I do not know that. Be more specific!")
+        
         elif cmd == 2:
             succeeded = False
             api_url = r"http://api.openweathermap.org/data/2.5/weather?q="
@@ -188,6 +215,54 @@ while True:
                     succeeded = True
             if not succeeded:
                 print("Sorry, I could not resolve the location you gave me.")
+        
+# Here are the processing of the new logical component:
+        elif cmd == 31: # if input pattern is "I know that * is *"
+            object,subject=params[1].split(' is ')
+            expr=read_expr(subject + '(' + object + ')')
+            # >>> ADD SOME CODES HERE to make sure expr does not contradict 
+            # with the KB before appending, otherwise show an error message.
+            
+            print('Checking if it contradicts with the KB')
+            kbTemp = kb.copy()
+            kbTemp.append(expr)
+            
+            answer=ResolutionProver().prove(None, kbTemp, verbose=True)
+            if answer:
+                print('Sorry, it contradicts with the KB.')
+            else:
+                existFlag = False
+                for element in kb:
+                    if(element == expr):
+                        print('It already exists in the KB.')
+                        existFlag = True
+                
+                if(existFlag == False):
+                    print('OK, I will remember that',object,'is', subject)
+                    kb.append(expr)
+                
+        elif cmd == 32: # if the input pattern is "check that * is *"
+            object,subject=params[1].split(' is ')
+            expr=read_expr(subject + '(' + object + ')')
+            answer=ResolutionProver().prove(expr, kb, verbose=True)
+            if answer:
+               print('Correct.')
+            else:
+               print('It may not be true.') 
+               
+               print('Checking if it must be false')
+               
+               expr=read_expr('-'+subject + '(' + object + ')')
+               answer=ResolutionProver().prove(expr,kb,verbose=True)
+               if answer:
+                   print('It is incorret')
+               else:
+                   print('Sorry I do not know the answer')
+               
+               # >> This is not an ideal answer.
+               # >> ADD SOME CODES HERE to find if expr is false, then give a
+               # definite response: either "Incorrect" or "Sorry I don't know." 
+        
         elif cmd == 99:
              
             #Open the csv file
@@ -210,6 +285,7 @@ while True:
             
             allwords = getAlluniqueWords(rows, wordsInYourLine)
             print(allwords)
+            
             
             '''
             theRow = rows[0][0]
@@ -265,6 +341,6 @@ while True:
                 file.close()
                     
                     
-                    #print("I did not get that, please try again.")
+                #print("I did not get that, please try again.")
     else:
         print(answer)
