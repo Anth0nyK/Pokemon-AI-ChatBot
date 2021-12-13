@@ -15,11 +15,7 @@ import json, requests
 #insert your personal OpenWeathermap API key here if you have one, and want to use this feature
 APIkey = "5403a1e0442ce1dd18cb1bf7c40e776f" 
 
-#######################################################
-#  Initialise AIML agent
-#######################################################
-import aiml
-# Create a Kernel object. No string encoding (all I/O is unicode)
+
 
 
 
@@ -29,24 +25,63 @@ import aiml
 from nltk.sem import Expression
 from nltk.inference import ResolutionProver
 read_expr = Expression.fromstring
+#######################################################
 
 #######################################################
 #  Initialise Knowledgebase. 
 #######################################################
 import pandas
+import sys
+
 kb=[]
 data = pandas.read_csv('kb.csv', header=None)
 [kb.append(read_expr(row)) for row in data[0]]
 # >>> ADD SOME CODES here for checking KB integrity (no contradiction), 
 # otherwise show an error message and terminate
+expr = None
+answer=ResolutionProver().prove(expr, kb, verbose=False)
+if answer:
+   print('KB Integrity check failed. Please check your kb file.')
+   sys.exit()
+else:
+   print('KB Integrity check passed.') 
+
+#######################################################
 
 
 
+#######################################################
+#  Initialise spellchecker and regular expressions
+#######################################################
+from spellchecker import SpellChecker
+import re
+spell = SpellChecker()
 
+def askYN():
+    yes={'yes','y'}
+    no={'no','n'}
+    
+    done = False
+    #print(question)
+    while not done:
+        userChoice = input().lower()
+        if userChoice in yes:
+            return True
+        elif userChoice in no:
+            return False
+        else:
+            print("Please respond in yes or no.")
+
+
+#######################################################
+#  TFIDF and Cosine Similarity 
+#######################################################
 import csv
 import math
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+#######################################################
+
 
 
 
@@ -96,6 +131,7 @@ def idf_function(allWords, rows, yourLine):
         
     NumOfSample = len(newRows)
     
+    #old code without using set()
     '''
     for i in range(len(allWords)):
         counter = 0
@@ -146,13 +182,15 @@ def cosineSim_function(list1,list2):
     
     return cosine_similarity(array_vec_1,array_vec_2)
     
-    
+#######################################################
 
 
 
-
-
-
+#######################################################
+#  Initialise AIML agent
+#######################################################
+import aiml
+# Create a Kernel object. No string encoding (all I/O is unicode)
 kern = aiml.Kernel()
 kern.setTextEncoding(None)
 # Use the Kernel's bootstrap() method to initialize the Kernel. The
@@ -161,13 +199,24 @@ kern.setTextEncoding(None)
 # to run after the files are loaded.
 # The optional brainFile argument specifies a brain file to load.
 kern.bootstrap(learnFiles="mybot-logic.xml")
+
+#######################################################
+
+
+
+
 #######################################################
 # Welcome user
 #######################################################
 print("Welcome to this chat bot. Please feel free to ask questions from me!")
+
+
+
+
 #######################################################
 # Main loop
 #######################################################
+
 while True:
     #get user input
     try:
@@ -179,10 +228,34 @@ while True:
     responseAgent = 'aiml'
     #activate selected response agent
     if responseAgent == 'aiml':
-        answer = kern.respond(userInput)
+        #remove the punctuations from userinput with regular expressions
+        userInput = re.sub(r'[^\w\s]','',userInput)
+        
+        #check the spelling
+        SCwords = spell.split_words(userInput)
+        SCwords2 = [spell.correction(word) for word in SCwords]
+        typoFound = False
+        #print(SCwords2)
+        
+        for i in range(len(SCwords)):
+            if(SCwords[i]!=SCwords2[i]):
+                typoFound = True
+        
+        if(typoFound == True):
+            newUserInput = ' '.join(SCwords2)
+            print("Did you mean " + newUserInput + "? (y/n)")
+            YesOrNo = askYN()
+            if(YesOrNo == True):
+                #if yes, get the answer with the corrected userinput
+                userInput = newUserInput
+                answer = kern.respond(userInput)
+            else:
+                #if no, get the answer with the userinput
+                answer = kern.respond(userInput)
+        else:
+            answer = kern.respond(userInput)
+    
     #post-process the answer for commands
-    
-    
     if answer[0] == '#':
         params = answer[1:].split('$')
         cmd = int(params[0])
@@ -248,23 +321,24 @@ while True:
             if answer:
                print('Correct.')
             else:
-               print('It may not be true.') 
+               #print('It may not be true.') 
                
                print('Checking if it must be false')
                
                expr=read_expr('-'+subject + '(' + object + ')')
                answer=ResolutionProver().prove(expr,kb,verbose=True)
+               
                if answer:
-                   print('It is incorret')
+                   print('It is incorret.')
                else:
-                   print('Sorry I do not know the answer')
+                   print('Sorry I do not know the answer.')
                
                # >> This is not an ideal answer.
                # >> ADD SOME CODES HERE to find if expr is false, then give a
                # definite response: either "Incorrect" or "Sorry I don't know." 
         
         elif cmd == 99:
-             
+            #If the bot cannot find an answer in aiml, find it on csv with similarity based search
             #Open the csv file
             file = open("exampleQA.csv")
             #Get the rows from the file with the reader

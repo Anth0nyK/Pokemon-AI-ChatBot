@@ -46,7 +46,32 @@
 
 <category><pattern> CHECK THAT * IS *</pattern>
   <template>#32$<star index="1"/> is <star index="2"/></template></category>  
-   
+
+
+<!-- Weather API -->
+<category><pattern> WHAT IS THE WEATHER LIKE IN * </pattern>
+  <template>#2$<star/></template></category>
+
+<category><pattern> HOW IS THE WEATHER IN * </pattern>
+  <template><srai>WHAT IS THE WEATHER LIKE IN <star/></srai></template></category>
+
+<!--- Wikipedia API 
+<category><pattern> WHAT IS A * </pattern>
+  <template>#1$<star index="1"/></template></category>
+
+<category><pattern> WHAT IS AN * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+
+<category><pattern> WHAT IS * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+
+<category><pattern> DEFINE * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+
+<category><pattern> WHO IS * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+  
+-->
 
 <!-- Default reaction -->
 <category><pattern> * </pattern>
