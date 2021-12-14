@@ -153,6 +153,7 @@ def idf_function(allWords, rows, yourLine):
             for k in range(len(theList)):
                 if theList[k] == allWords[i]:
                     counter = counter + 1
+                    break
         IDFdictionary[allWords[i]] = math.log10(NumOfSample/counter)
     
     print("IDF", IDFdictionary, "\n")
