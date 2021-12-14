@@ -99,8 +99,9 @@ if(foundIt):
             #image = response_json['sprites']['front_default']
             locationList = []
             for i in range(arrayLength):
-                locationList.append(response_json[i]["location_area"]["name"])
+                locationList.append(response_json[i]["location_area"]["name"].replace('-', ' '))
             
+            print("\n" + "You can find this Pokemon in these area:")
             print(locationList)
             #print(image)
             #print("!!!!!" + str(location))
@@ -109,8 +110,9 @@ if(foundIt):
             #image = io.imread(image)
             #plt.imshow(image)
             #plt.show()
-    if not succeeded:
-        print("Sorry, I could not find an image of that Pokemon.")
+    if ((foundIt == True) and (succeeded == False)):
+        print("This pokemon cannot be found in the wild. You can get it by evolving it.")
+        
 
 
     
