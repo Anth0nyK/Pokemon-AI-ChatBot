@@ -113,7 +113,7 @@ while True:
     userInput = input("Please enter a question: ")
     
     #Open the csv file
-    file = open("exampleQA.csv")
+    file = open("exampleQA2.csv")
     #Get the rows from the file with the reader
     csvreader = csv.reader(file)
     

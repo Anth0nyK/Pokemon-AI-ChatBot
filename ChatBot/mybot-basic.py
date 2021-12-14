@@ -289,7 +289,7 @@ while True:
             if not succeeded:
                 print("Sorry, I could not resolve the location you gave me.")
         
-# Here are the processing of the new logical component:
+        # Here are the processing of the new logical component:
         elif cmd == 31: # if input pattern is "I know that * is *"
             object,subject=params[1].split(' is ')
             expr=read_expr(subject + '(' + object + ')')
