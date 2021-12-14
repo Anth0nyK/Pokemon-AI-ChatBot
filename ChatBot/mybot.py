@@ -24,8 +24,11 @@ APIkey = "5403a1e0442ce1dd18cb1bf7c40e776f"
 #######################################################
 from nltk.sem import Expression
 from nltk.inference import ResolutionProver
+import nltk
 read_expr = Expression.fromstring
 #######################################################
+
+
 
 #######################################################
 #  Initialise Knowledgebase. 
@@ -64,7 +67,7 @@ def askYN():
     done = False
     #print(question)
     while not done:
-        userChoice = input().lower()
+        userChoice = input("> ").lower()
         if userChoice in yes:
             return True
         elif userChoice in no:
@@ -83,6 +86,14 @@ import numpy as np
 #######################################################
 
 
+
+######################################################
+#   Image plotter
+######################################################
+import matplotlib.pyplot as plt
+from skimage import io
+
+######################################################
 
 
 def getAlluniqueWords(rows, wordsInyourLine):
@@ -199,7 +210,7 @@ kern.setTextEncoding(None)
 # The optional commands argument is a command (or list of commands)
 # to run after the files are loaded.
 # The optional brainFile argument specifies a brain file to load.
-kern.bootstrap(learnFiles="mybot-logic.xml")
+kern.bootstrap(learnFiles="mybot-aiml.xml")
 
 #######################################################
 
@@ -209,7 +220,7 @@ kern.bootstrap(learnFiles="mybot-logic.xml")
 #######################################################
 # Welcome user
 #######################################################
-print("Welcome to this chat bot. Please feel free to ask questions from me!")
+print("Welcome Pokemon trainer! Please feel free to ask questions from me!")
 
 
 
@@ -289,7 +300,83 @@ while True:
                     succeeded = True
             if not succeeded:
                 print("Sorry, I could not resolve the location you gave me.")
+                
+        elif cmd == 3:
+            pokemonToFind = params[1]
+            #Open the csv file
+            file = open("pokemon.csv")
+            #Get the rows from the file with the reader
+            csvreader = csv.reader(file)
+            
+             
+            rows = []
+            for row in csvreader:
+                rows.append(row)
+            
+            pokemonSim = {}
+            
+            thePokemon = ""
+            foundInCSV = False
+            foundIt = False
+            
+            for i in range(len(rows)):
+                if(pokemonToFind.capitalize() == rows[i][0]):
+                    pokemonDesc = rows[i][1]
+                    foundInCSV = True
+                    foundIt = True
+                    thePokemon = pokemonToFind[0].lower() + pokemonToFind[1:]
+                    print(pokemonDesc)
+                    break
+                
+                
+            if(foundInCSV == False):
+                for i in range(len(rows)):    
+                    #print(rows[i][0])
+                    pokemonSim[rows[i][0]] = nltk.edit_distance(pokemonToFind.capitalize(),rows[i][0])    
+                    best_match = min(pokemonSim, key=pokemonSim.get)
+            
+            
+                print("Did you mean " + best_match + "? (y/n)")
+                YesOrNo = askYN()
+                if(YesOrNo == True):
+                    #if yes
+                    for i in range(len(rows)):
+                        if(best_match.capitalize() == rows[i][0]):
+                            pokemonDesc = rows[i][1]
+                            thePokemon = best_match[0].lower() + best_match[1:]
+                            #print("!!!!!!"+thePokemon)
+                            print(pokemonDesc)
+                            foundIt = True
+                            break
+                else:
+                    #if no
+                    print("Sorry, we cannot find that pokemon.")
+            
+            
+            if(foundIt):  
+                #print("image part")
+                succeeded = False
+                api_url = r"https://pokeapi.co/api/v2/pokemon/"
+                response = requests.get(api_url + thePokemon)
+                #print("!!!!" + thePokemon)
+                
+                if response.status_code == 200:
+                    response_json = json.loads(response.content)
+                    if response_json:
+                        image = response_json['sprites']['front_default']
+                        #print(image)
+                        succeeded = True
+                        image = io.imread(image)
+                        plt.imshow(image)
+                        plt.show()
+                if not succeeded:
+                    print("Sorry, I could not find an image of that Pokemon.")
         
+        
+        elif cmd == 4:
+            print("test")
+        
+            
         # Here are the processing of the new logical component:
         elif cmd == 31: # if input pattern is "I know that * is *"
             object,subject=params[1].split(' is ')

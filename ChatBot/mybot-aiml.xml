@@ -75,7 +75,7 @@
   <template><srai>WHAT IS THE WEATHER LIKE IN <star/></srai></template></category>
 
 
-<!-- Pokemon and Item -->
+<!-- Pokemon what -->
 <category><pattern> WHAT IS A * </pattern>
   <template>#3$<star index="1"/></template></category>
 
@@ -90,6 +90,20 @@
 
 <category><pattern> WHO IS * </pattern>
   <template><srai>WHAT IS A <star/></srai></template></category>
+
+
+<!-- Pokemon where -->
+<category><pattern> WHERE IS * </pattern>
+  <template>#4$<star index="1"/></template></category>
+
+<category><pattern> WHERE CAN I FIND * </pattern>
+  <template><srai>WHERE IS <star/></srai></template></category>
+  
+<category><pattern> WHERE CAN I CATCH * </pattern>
+  <template><srai>WHERE IS <star/></srai></template></category>
+  
+
+
 
 
 <!-- Default reaction -->
