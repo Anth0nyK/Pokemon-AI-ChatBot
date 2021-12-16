@@ -55,11 +55,11 @@ foundIt = False
 
 for i in range(len(rows)):
     if(userInput.capitalize() == rows[i][0]):
-        pokemonDesc = rows[i][1]
+        #pokemonDesc = rows[i][1]
         foundInCSV = True
         foundIt = True
         thePokemon = userInput[0].lower() + userInput[1:]
-        print(pokemonDesc)
+        #print(pokemonDesc)
         break
     
     
@@ -76,10 +76,10 @@ if(foundInCSV == False):
         #if yes
         for i in range(len(rows)):
             if(best_match.capitalize() == rows[i][0]):
-                pokemonDesc = rows[i][1]
+                #pokemonDesc = rows[i][1]
                 thePokemon = best_match[0].lower() + best_match[1:]
                 #print("!!!!!!"+thePokemon)
-                print(pokemonDesc)
+                #print(pokemonDesc)
                 foundIt = True
                 break
     else:
@@ -88,7 +88,6 @@ if(foundInCSV == False):
 
 
 if(foundIt):  
-    #print("image part")
     succeeded = False
     api_url = r"https://pokeapi.co/api/v2/pokemon/"
     response = requests.get(api_url + thePokemon + "/encounters")
@@ -100,9 +99,16 @@ if(foundIt):
             locationList = []
             for i in range(arrayLength):
                 locationList.append(response_json[i]["location_area"]["name"].replace('-', ' '))
-            
-            print("\n" + "You can find this Pokemon in these area:")
-            print(locationList)
+            if(arrayLength > 1):
+                print("\n" + "You can find this Pokemon in these area:")
+            else:
+                print("\n" + "You can only find this Pokemon in this area:")
+            for i in range(arrayLength):
+                print(locationList[i], end = '')
+                if(i == arrayLength-1):
+                    print(".")
+                else:
+                    print(", ", end = '')
             #print(image)
             #print("!!!!!" + str(location))
             succeeded = True
