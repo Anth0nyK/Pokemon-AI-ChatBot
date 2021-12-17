@@ -89,33 +89,64 @@ if(foundInCSV == False):
 
 if(foundIt):  
     succeeded = False
-    api_url = r"https://pokeapi.co/api/v2/pokemon/"
-    response = requests.get(api_url + thePokemon + "/encounters")
+    api_url = r"https://pokeapi.co/api/v2/pokemon-species/"
+    response = requests.get(api_url + thePokemon)
     if response.status_code == 200:
         response_json = json.loads(response.content)
         if response_json:
-            arrayLength = len(response_json)
-            #image = response_json['sprites']['front_default']
-            locationList = []
-            for i in range(arrayLength):
-                locationList.append(response_json[i]["location_area"]["name"].replace('-', ' '))
-            if(arrayLength > 1):
-                print("\n" + "You can find this Pokemon in these area:")
-            else:
-                print("\n" + "You can only find this Pokemon in this area:")
-            for i in range(arrayLength):
-                print(locationList[i], end = '')
-                if(i == arrayLength-1):
-                    print(".")
-                else:
-                    print(", ", end = '')
-            #print(image)
-            #print("!!!!!" + str(location))
-            succeeded = True
             
-            #image = io.imread(image)
-            #plt.imshow(image)
-            #plt.show()
+            
+            evoChain = response_json['evolution_chain']['url']
+            #print(evoChain)
+            
+            api_url2 = evoChain
+            response2 = requests.get(api_url2)
+            if response2.status_code == 200:
+                response_json2 = json.loads(response2.content)
+                if response_json2:
+                    haveFirst = False
+                    firstUrl = response_json2['chain']['species']['url']
+                    firstID = firstUrl[42:]
+                    firstID = firstID[:-1]
+                    if(int(firstID) <= 151):
+                        firstForm = response_json2['chain']['species']['name']
+                        print(firstForm.capitalize())
+                        haveFirst = True
+                        
+                    try:
+                        middleLength = len(response_json2['chain']['evolves_to'])
+                        if(middleLength != 0 and haveFirst == True):
+                            print(" ")
+                            print("can evolve to")
+                            print(" ")
+                        for i in range(middleLength):
+                            middleUrl = response_json2['chain']['evolves_to'][i]['species']['url']
+                            middleID = middleUrl[42:]
+                            middleID = middleID[:-1]
+                            if(int(middleID) <= 151):
+                                middleForm = response_json2['chain']['evolves_to'][i]['species']['name']
+                                print(middleForm.capitalize())
+                                
+                        finalLength = len(response_json2['chain']['evolves_to'][0]['evolves_to'])
+                        #print(finalLength)
+                        if(finalLength != 0):
+                            print(" ")
+                            print("Can evolve to")
+                            print(" ")
+                        for j in range(finalLength):
+                            finalUrl = response_json2['chain']['evolves_to'][0]['evolves_to'][j]['species']['url']
+                            finalID = finalUrl[42:]
+                            finalID = finalID[:-1]
+                            if(int(finalID) <= 151):
+                                finalForm = response_json2['chain']['evolves_to'][0]['evolves_to'][j]['species']['name']
+                                print(finalForm.capitalize())
+
+                    except:
+                        print("")
+                        
+                    succeeded = True
+            
+            
     if ((foundIt == True) and (succeeded == False)):
         print("This pokemon cannot be found in the wild. You can get it by evolving it.")
         

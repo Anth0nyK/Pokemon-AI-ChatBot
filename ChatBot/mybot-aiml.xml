@@ -99,11 +99,19 @@
 <category><pattern> WHERE CAN I FIND * </pattern>
   <template><srai>WHERE IS <star/></srai></template></category>
   
-<category><pattern> WHERE CAN I CATCH * </pattern>
+<category><pattern> WHERE CAN I FIND A * </pattern>
   <template><srai>WHERE IS <star/></srai></template></category>
   
+<category><pattern> WHERE CAN I CATCH * </pattern>
+  <template><srai>WHERE IS <star/></srai></template></category>
+
+<category><pattern> WHERE CAN I CATCH A * </pattern>
+  <template><srai>WHERE IS <star/></srai></template></category>
 
 
+<!-- Pokemon evolution -->
+<category><pattern> WHAT CAN * EVOLVE INTO </pattern>
+  <template>#5$<star index="1"/></template></category>
 
 
 <!-- Default reaction -->
