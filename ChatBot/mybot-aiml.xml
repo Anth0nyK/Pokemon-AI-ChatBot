@@ -49,6 +49,8 @@
   <template>#32$<star index="1"/> is <star index="2"/></template></category>  
 
 
+
+
 <!--- Wikipedia API 
 <category><pattern> WHAT IS A * </pattern>
   <template>#1$<star index="1"/></template></category>
@@ -112,8 +114,17 @@
 <!-- Pokemon evolution -->
 <category><pattern> WHAT CAN * EVOLVE INTO </pattern>
   <template>#5$<star index="1"/></template></category>
+  
+<category><pattern> WHAT CAN A * EVOLVE INTO </pattern>
+  <template>#5$<star index="1"/></template></category>
 
+<category><pattern> WHAT DOES * EVOLVE INTO </pattern>
+  <template>#5$<star index="1"/></template></category>
 
+<category><pattern> WHAT DOES A * EVOLVE INTO </pattern>
+  <template>#5$<star index="1"/></template></category>
+  
+  
 <!-- Default reaction -->
 <category><pattern> * </pattern>
   <template>#99$<star index="1"/></template></category>

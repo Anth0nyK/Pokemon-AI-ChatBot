@@ -332,25 +332,34 @@ while True:
                 for i in range(len(rows)):    
                     #print(rows[i][0])
                     pokemonSim[rows[i][0]] = nltk.edit_distance(pokemonToFind.capitalize(),rows[i][0])    
+                    #print(pokemonSim)
                     best_match = min(pokemonSim, key=pokemonSim.get)
-            
-            
-                print("Did you mean " + best_match + "? (y/n)")
-                YesOrNo = askYN()
-                if(YesOrNo == True):
-                    #if yes
-                    for i in range(len(rows)):
-                        if(best_match.capitalize() == rows[i][0]):
-                            pokemonDesc = rows[i][1]
-                            thePokemon = best_match[0].lower() + best_match[1:]
-                            #print("!!!!!!"+thePokemon)
-                            print(pokemonDesc)
-                            foundIt = True
-                            break
+                    
+                totallyWrong = False
+                if(len(best_match) == int(pokemonSim[best_match])):
+                    totallyWrong = True
+                    
+                
+                if(totallyWrong == False):
+                    
+                    print("Did you mean the Pokemon " + best_match + "? (y/n)")
+                    YesOrNo = askYN()
+                    if(YesOrNo == True):
+                        #if yes
+                        for i in range(len(rows)):
+                            if(best_match.capitalize() == rows[i][0]):
+                                pokemonDesc = rows[i][1]
+                                thePokemon = best_match[0].lower() + best_match[1:]
+                                #print("!!!!!!"+thePokemon)
+                                print(pokemonDesc)
+                                foundIt = True
+                                break
+                    else:
+                        #if no
+                        print("Sorry, we cannot find that pokemon.")
+                        
                 else:
-                    #if no
-                    print("Sorry, we cannot find that pokemon.")
-            
+                    print("Sorry, we do not understand what did you mean.")
             
             if(foundIt):  
                 #print("image part")
@@ -405,23 +414,33 @@ while True:
                     #print(rows[i][0])
                     pokemonSim[rows[i][0]] = nltk.edit_distance(pokemonToFind.capitalize(),rows[i][0])    
                     best_match = min(pokemonSim, key=pokemonSim.get)
-            
-            
-                print("Did you mean " + best_match + "? (y/n)")
-                YesOrNo = askYN()
-                if(YesOrNo == True):
-                    #if yes
-                    for i in range(len(rows)):
-                        if(best_match.capitalize() == rows[i][0]):
-                            #pokemonDesc = rows[i][1]
-                            thePokemon = best_match[0].lower() + best_match[1:]
-                            #print("!!!!!!"+thePokemon)
-                            #print(pokemonDesc)
-                            foundIt = True
-                            break
+
+
+                totallyWrong = False
+                if(len(best_match) == int(pokemonSim[best_match])):
+                    totallyWrong = True
+
+                    
+                if(totallyWrong == False):
+                        
+                    print("Did you mean the Pokemon " + best_match + "? (y/n)")
+                    YesOrNo = askYN()
+                    if(YesOrNo == True):
+                        #if yes
+                        for i in range(len(rows)):
+                            if(best_match.capitalize() == rows[i][0]):
+                                #pokemonDesc = rows[i][1]
+                                thePokemon = best_match[0].lower() + best_match[1:]
+                                #print("!!!!!!"+thePokemon)
+                                #print(pokemonDesc)
+                                foundIt = True
+                                break
+                    else:
+                        #if no
+                        print("Sorry, we cannot find that pokemon.")
+                
                 else:
-                    #if no
-                    print("Sorry, we cannot find that pokemon.")
+                    print("Sorry, we do not understand what did you mean.")
 
 
             if(foundIt):  
@@ -493,22 +512,29 @@ while True:
                     pokemonSim[rows[i][0]] = nltk.edit_distance(pokemonToFind.capitalize(),rows[i][0])    
                     best_match = min(pokemonSim, key=pokemonSim.get)
             
-            
-                print("Did you mean " + best_match + "? (y/n)")
-                YesOrNo = askYN()
-                if(YesOrNo == True):
-                    #if yes
-                    for i in range(len(rows)):
-                        if(best_match.capitalize() == rows[i][0]):
-                            #pokemonDesc = rows[i][1]
-                            thePokemon = best_match[0].lower() + best_match[1:]
-                            #print("!!!!!!"+thePokemon)
-                            #print(pokemonDesc)
-                            foundIt = True
-                            break
+                totallyWrong = False
+                if(len(best_match) == int(pokemonSim[best_match])):
+                    totallyWrong = True
+                    
+                if(totallyWrong == False):
+                
+                    print("Did you mean the Pokmeon " + best_match + "? (y/n)")
+                    YesOrNo = askYN()
+                    if(YesOrNo == True):
+                        #if yes
+                        for i in range(len(rows)):
+                            if(best_match.capitalize() == rows[i][0]):
+                                #pokemonDesc = rows[i][1]
+                                thePokemon = best_match[0].lower() + best_match[1:]
+                                #print("!!!!!!"+thePokemon)
+                                #print(pokemonDesc)
+                                foundIt = True
+                                break
+                    else:
+                        #if no
+                        print("Sorry, we cannot find that pokemon.")
                 else:
-                    #if no
-                    print("Sorry, we cannot find that pokemon.")
+                    print("Sorry, we do not understand what did you mean.")
             
             
             if(foundIt):  
