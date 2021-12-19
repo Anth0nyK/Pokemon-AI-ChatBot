@@ -317,6 +317,7 @@ while True:
             thePokemon = ""
             foundInCSV = False
             foundIt = False
+            totallyWrong = False
             
             for i in range(len(rows)):
                 if(pokemonToFind.capitalize() == rows[i][0]):
@@ -336,9 +337,10 @@ while True:
                     best_match = min(pokemonSim, key=pokemonSim.get)
                     
                 totallyWrong = False
-                if(len(best_match) == int(pokemonSim[best_match])):
+                if(int(pokemonSim[best_match]) > len(best_match)):
                     totallyWrong = True
                     
+                
                 
                 if(totallyWrong == False):
                     
@@ -379,8 +381,76 @@ while True:
                         plt.show()
                 if not succeeded:
                     print("Sorry, I could not find an image of that Pokemon.")
-        
+            
+            
+            
             file.close()
+            
+            #check if the user is asking what is the strongest pokemon,etc.
+            #use the code from the tfidf part here and screen the QA csv
+            if(totallyWrong == True):
+                file = open("QA.csv")
+                csvreader = csv.reader(file)
+                
+                #Define your line here
+                yourLine = userInput
+                #lowercase the line
+                yourLine = yourLine.lower()
+                #Split yourLine into words and put them into wordsInYourLine lsit
+                wordsInYourLine = yourLine.split()
+                
+                
+                #Create a list called rows and insert the rows into it with for loop
+                rows = []
+                for row in csvreader:
+                    rows.append(row)
+                
+                allwords = getAlluniqueWords(rows, wordsInYourLine)
+                print(allwords)
+                
+                
+                idf = idf_function(allwords, rows, yourLine)
+                
+                #Term Frequency, tf = nunber of occurences of a word / total word length of sample
+                #tfYourLine = 
+                Yourtf = tf_function(wordsInYourLine)
+                
+                
+                yourTFIDF = tfidf_function(Yourtf, idf, allwords)
+                
+                NumberOfSampleInCSV = len(rows)
+                cosineSimList = [None]*NumberOfSampleInCSV
+                
+                for i in range(len(rows)):
+                    wordsIntheLine = rows[i][0].split()
+                    tfOftheLine = tf_function(wordsIntheLine)
+                    TFIDFofthLine = tfidf_function(tfOftheLine, idf, allwords)
+                    #Calculate cosine simularity with "Your TFIDF" and one of the line's TFIDF and save the data in cosineSimList
+                    cosineSimList[i] = float(cosineSim_function(list(yourTFIDF.values()),list(TFIDFofthLine.values())))
+            
+                
+                print("")
+                print("Cosine Similarity of your line with the line on KB accordingly:")
+                print(cosineSimList)
+                
+                
+                #Find the max cosine simularity from the list and get that index to find the corresponding question
+                max_value = max(cosineSimList)
+                max_index = cosineSimList.index(max_value)
+                
+                print("\n\n")
+                
+                #If max value is 0, it means that no similar question is found with your line
+                if max_value == 0:
+                    print("Sorry, we do not have a similar question in the KB :(")
+                else:
+                    print("Your question:", yourLine, ", is similar to:")
+                    print(rows[max_index][0])
+                    print("")
+                    print("Answer:", rows[max_index][1])
+                
+                    file.close()
+            
             
         elif cmd == 4:
             pokemonToFind = params[1].capitalize() 
@@ -477,6 +547,7 @@ while True:
                     print("This pokemon cannot be found in the wild. You can get it by evolving it.")
                         
             file.close()
+        
             
             
         elif cmd == 5:
@@ -567,7 +638,7 @@ while True:
                                     middleLength = len(response_json2['chain']['evolves_to'])
                                     if(middleLength != 0 and haveFirst == True):
                                         print(" ")
-                                        print("can evolve to")
+                                        print("can evolve into")
                                         print(" ")
                                     for i in range(middleLength):
                                         middleUrl = response_json2['chain']['evolves_to'][i]['species']['url']
@@ -581,7 +652,7 @@ while True:
                                     #print(finalLength)
                                     if(finalLength != 0):
                                         print(" ")
-                                        print("can evolve to")
+                                        print("can evolve into")
                                         print(" ")
                                     for j in range(finalLength):
                                         finalUrl = response_json2['chain']['evolves_to'][0]['evolves_to'][j]['species']['url']
@@ -656,7 +727,7 @@ while True:
         elif cmd == 99:
             #If the bot cannot find an answer in aiml, find it on csv with similarity based search
             #Open the csv file
-            file = open("exampleQA.csv")
+            file = open("QA.csv")
             #Get the rows from the file with the reader
             csvreader = csv.reader(file)
             
