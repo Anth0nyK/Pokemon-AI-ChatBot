@@ -34,7 +34,6 @@ read_expr = Expression.fromstring
 #  Initialise Knowledgebase. 
 #######################################################
 import pandas
-import sys
 
 kb=[]
 data = pandas.read_csv('kb.csv', header=None)
@@ -45,7 +44,7 @@ expr = None
 answer=ResolutionProver().prove(expr, kb, verbose=False)
 if answer:
    print('KB Integrity check failed. Please check your kb file.')
-   sys.exit()
+   raise SystemExit
 else:
    print('KB Integrity check passed.') 
 
@@ -428,7 +427,7 @@ while True:
                     #Calculate cosine simularity with "Your TFIDF" and one of the line's TFIDF and save the data in cosineSimList
                     cosineSimList[i] = float(cosineSim_function(list(yourTFIDF.values()),list(TFIDFofthLine.values())))
             
-                
+                  
                 print("")
                 print("Cosine Similarity of your line with the line on KB accordingly:")
                 print(cosineSimList)
@@ -695,6 +694,7 @@ while True:
                     if(element == expr):
                         print('It already exists in the KB.')
                         existFlag = True
+                        
                 
                 if(existFlag == False):
                     print('OK, I will remember that',object,'is', subject)

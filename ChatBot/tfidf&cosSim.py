@@ -75,6 +75,7 @@ def idf_function(allWords, rows, yourLine):
             for k in range(len(theList)):
                 if theList[k] == allWords[i]:
                     counter = counter + 1
+                    break
         IDFdictionary[allWords[i]] = math.log10(NumOfSample/counter)
     
     print("IDF", IDFdictionary, "\n")
@@ -113,7 +114,7 @@ while True:
     userInput = input("Please enter a question: ")
     
     #Open the csv file
-    file = open("exampleQA2.csv")
+    file = open("forTesting.csv")
     #Get the rows from the file with the reader
     csvreader = csv.reader(file)
     
