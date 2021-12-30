@@ -92,14 +92,14 @@ while True:
             
         elif cmd == 32: # if the input pattern is "check that * is *"
             object,subject=params[1].split(' is ')
-            expr=read_expr(subject + '(' + object + ')')
+            expr=read_expr(subject.replace(" ","") + '(' + object + ')')
             answer=ResolutionProver().prove(expr, kb, verbose=True)
             if answer:
                print('Correct.')
             else:
                print('It may not be true.') 
                
-               expr=read_expr('-'+subject + '(' + object + ')')
+               expr=read_expr('-'+subject.replace(" ","") + '(' + object + ')')
                answer=ResolutionProver().prove(expr,kb,verbose=True)
                
                if answer:
@@ -190,7 +190,7 @@ while True:
             else:
                print('It may not be true.') 
                
-               expr=read_expr('-'+subject + '(' + object + ')')
+               expr=read_expr('-'+subject.replace(" ","") + '(' + object + ')')
                answer=ResolutionProver().prove(expr,kb,verbose=True)
                
                if answer:

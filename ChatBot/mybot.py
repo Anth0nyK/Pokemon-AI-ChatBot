@@ -16,8 +16,13 @@ import json, requests
 APIkey = "5403a1e0442ce1dd18cb1bf7c40e776f" 
 
 
+#######################################################
+#  Initialise speech recognition
+#######################################################
+import speech_recognition
+sr = speech_recognition.Recognizer()
 
-
+import keyboard
 
 #######################################################
 #  Initialise NLTK Inference
@@ -36,7 +41,7 @@ read_expr = Expression.fromstring
 import pandas
 
 kb=[]
-data = pandas.read_csv('kb.csv', header=None)
+data = pandas.read_csv('pokemonLogic.csv', header=None)
 [kb.append(read_expr(row)) for row in data[0]]
 # >>> ADD SOME CODES here for checking KB integrity (no contradiction), 
 # otherwise show an error message and terminate
@@ -125,7 +130,7 @@ def tf_function(wordsInYourLine):
         #Term Frequency, tf = nunber of occurences of a word / total word length of sample
         TFdictionary[newlist[i]] = counter / len(wordsInYourLine)
     
-    print("TF", TFdictionary, "\n")
+    #print("TF", TFdictionary, "\n")
     
     return TFdictionary
 
@@ -166,7 +171,7 @@ def idf_function(allWords, rows, yourLine):
                     break
         IDFdictionary[allWords[i]] = math.log10(NumOfSample/counter)
     
-    print("IDF", IDFdictionary, "\n")
+    #print("IDF", IDFdictionary, "\n")
 
     #print(allWords)
 
@@ -181,8 +186,8 @@ def tfidf_function(tf,idf,allWords):
             if key2 == key:
                 tfidfDict[key] = value2 * idf[key]
 
-    print ("TFIDF",tfidfDict,"\n")
-    print("_______________________________________________________________________________________________________________________________")
+    #print ("TFIDF",tfidfDict,"\n")
+    #print("_______________________________________________________________________________________________________________________________")
     return tfidfDict
 
 
@@ -228,12 +233,69 @@ print("Welcome Pokemon trainer! Please feel free to ask questions from me!")
 #######################################################
 
 while True:
-    #get user input
+    print("")
+    print("This chat bot supports communications in text and voice.")
+    print("1 - Text mode")
+    print("2 - Voice mode")
+    print("Please select 1 or 2:")
+    
+    mode = ""
+    
     try:
         userInput = input("> ")
     except (KeyboardInterrupt, EOFError) as e:
         print("Bye!")
         break
+    
+    if userInput == "1":
+        print("Text mode selected")
+        mode = "text"
+        break
+    
+    elif userInput == "2":
+        print("Voice mode selected")
+        mode = "voice"
+        break
+    
+    else:
+        print("Please input 1 or 2.")
+        
+
+while True:
+    
+    if mode == "text":
+        #get user input
+        try:
+            userInput = input("> ")
+        except (KeyboardInterrupt, EOFError) as e:
+            print("Bye!")
+            break
+    
+    elif mode == "voice":
+        print("")
+        input("When you are ready, press Enter to start talking")
+
+        while True:
+            try:
+                with speech_recognition.Microphone() as mic:
+                    sr.adjust_for_ambient_noise(mic, duration=0.2)
+                    audio = sr.listen(mic)
+                    userInput = None
+                    userInput = sr.recognize_google(audio)
+                    print(f"Recognized {userInput}")
+                    
+            except speech_recognition.UnknownValueError():
+                sr = speech_recognition.Recognizer()
+                continue
+            
+            if userInput != None:
+                break
+                
+       
+            
+            
+    
+    
     #pre-process user input and determine response agent (if needed)
     responseAgent = 'aiml'
     #activate selected response agent
@@ -405,7 +467,7 @@ while True:
                     rows.append(row)
                 
                 allwords = getAlluniqueWords(rows, wordsInYourLine)
-                print(allwords)
+                #print(allwords)
                 
                 
                 idf = idf_function(allwords, rows, yourLine)
@@ -699,20 +761,18 @@ while True:
                 if(existFlag == False):
                     print('OK, I will remember that',object,'is', subject)
                     kb.append(expr)
-                
-                
+                    
+            
         elif cmd == 32: # if the input pattern is "check that * is *"
             object,subject=params[1].split(' is ')
-            expr=read_expr(subject + '(' + object + ')')
+            expr=read_expr(subject.replace(" ","") + '(' + object + ')')
             answer=ResolutionProver().prove(expr, kb, verbose=True)
             if answer:
                print('Correct.')
             else:
-               #print('It may not be true.') 
+               print('It may not be true.') 
                
-               print('Checking if it must be false')
-               
-               expr=read_expr('-'+subject + '(' + object + ')')
+               expr=read_expr('-'+subject.replace(" ","") + '(' + object + ')')
                answer=ResolutionProver().prove(expr,kb,verbose=True)
                
                if answer:
@@ -723,6 +783,93 @@ while True:
                # >> This is not an ideal answer.
                # >> ADD SOME CODES HERE to find if expr is false, then give a
                # definite response: either "Incorrect" or "Sorry I don't know." 
+               
+               
+        elif cmd == 33:
+            object,subject=params[1].split(' is not ')
+            expr=read_expr('-' + subject + '(' + object + ')')
+            
+            print('Checking if it contradicts with the KB')
+            kbTemp = kb.copy()
+            kbTemp.append(expr)
+            
+            answer=ResolutionProver().prove(None, kbTemp, verbose=True)
+            if answer:
+                print('Sorry, it contradicts with the KB.')
+            else:
+                existFlag = False
+                for element in kb:
+                    if(element == expr):
+                        print('It already exists in the KB.')
+                        existFlag = True
+                        
+                
+                if(existFlag == False):
+                    print('OK, I will remember that',object,'is not', subject)
+                    kb.append(expr)
+                    
+        elif cmd == 34:
+            object,subject=params[1].split(' can use ')
+            expr=read_expr(subject.replace(" ", "") + '(' + object + ')')
+            
+            print('Checking if it contradicts with the KB')
+            kbTemp = kb.copy()
+            kbTemp.append(expr)
+            
+            answer=ResolutionProver().prove(None, kbTemp, verbose=True)
+            if answer:
+                print('Sorry, it contradicts with the KB.')
+            else:
+                existFlag = False
+                for element in kb:
+                    if(element == expr):
+                        print('It already exists in the KB.')
+                        existFlag = True
+                        
+                
+                if(existFlag == False):
+                    print('OK, I will remember that',object,'can use', subject)
+                    kb.append(expr)
+                    
+        elif cmd == 35:
+            object,subject=params[1].split(' cannot use ')
+            expr=read_expr("-"+subject.replace(" ", "") + '(' + object + ')')
+            
+            print('Checking if it contradicts with the KB')
+            kbTemp = kb.copy()
+            kbTemp.append(expr)
+            
+            answer=ResolutionProver().prove(None, kbTemp, verbose=True)
+            if answer:
+                print('Sorry, it contradicts with the KB.')
+            else:
+                existFlag = False
+                for element in kb:
+                    if(element == expr):
+                        print('It already exists in the KB.')
+                        existFlag = True
+                        
+                
+                if(existFlag == False):
+                    print('OK, I will remember that',object,'cant use', subject)
+                    kb.append(expr)   
+                    
+        elif cmd == 36: # if the input pattern is "check that * is *"
+            object,subject=params[1].split(' cannot use ')
+            expr=read_expr('-' + subject.replace(" ","") + '(' + object + ')')
+            answer=ResolutionProver().prove(expr, kb, verbose=True)
+            if answer:
+               print('Correct.')
+            else:
+               print('It may not be true.') 
+               
+               expr=read_expr(subject.replace(" ","") + '(' + object + ')')
+               answer=ResolutionProver().prove(expr,kb,verbose=True)
+               
+               if answer:
+                   print('It is incorret.') 
+               else:
+                   print('Sorry I do not know the answer.')
         
         elif cmd == 99:
             #If the bot cannot find an answer in aiml, find it on csv with similarity based search

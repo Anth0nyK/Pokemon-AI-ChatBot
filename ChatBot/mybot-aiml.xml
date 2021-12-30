@@ -48,7 +48,17 @@
 <category><pattern> CHECK THAT * IS *</pattern>
   <template>#32$<star index="1"/> is <star index="2"/></template></category>  
 
+<category><pattern> I KNOW THAT * IS NOT *</pattern>
+  <template>#33$<star index="1"/> is not <star index="2"/></template></category>  
 
+<category><pattern> I KNOW THAT * CAN USE *</pattern>
+  <template>#34$<star index="1"/> can use <star index="2"/></template></category>  
+ 
+<category><pattern> I KNOW THAT * CANT USE *</pattern>
+  <template>#35$<star index="1"/> cannot use <star index="2"/></template></category>
+  
+<category><pattern> CHECK THAT * CANT USE *</pattern>
+  <template>#36$<star index="1"/> cannot use <star index="2"/></template></category>
 
 
 <!--- Wikipedia API 
