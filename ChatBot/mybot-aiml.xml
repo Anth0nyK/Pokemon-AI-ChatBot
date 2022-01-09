@@ -60,6 +60,9 @@
 <category><pattern> CHECK THAT * CANT USE *</pattern>
   <template>#36$<star index="1"/> cannot use <star index="2"/></template></category>
 
+<!-- Fuzzy Logic input -->
+<category><pattern> CHECK THAT THIS POKEMON IS STRONG</pattern>
+  <template>#37$</template></category>  
 
 <!--- Wikipedia API 
 <category><pattern> WHAT IS A * </pattern>

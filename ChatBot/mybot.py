@@ -99,6 +99,48 @@ from skimage import io
 
 ######################################################
 
+######################################################
+#   simpful fuzzy logic
+######################################################
+from simpful import *
+
+# A simple fuzzy inference system for the tipping problem
+# Create a fuzzy system object
+FS = FuzzySystem()
+
+S_1 = FuzzySet(points=[[0., 1.],  [93., 0.]], term="low")
+S_2 = FuzzySet(points=[[0., 0.], [93., 1.], [186., 0.]], term="normal")
+S_3 = FuzzySet(points=[[93., 0.],  [186., 1.]], term="high")
+FS.add_linguistic_variable("IV", LinguisticVariable([S_1, S_2, S_3], concept="IV"))
+
+F_1 = FuzzySet(points=[[175., 1.],  [382.5, 0.]], term="low")
+F_2 = FuzzySet(points=[[175., 0.], [382.5, 1.], [590., 0.]], term="normal")
+F_3 = FuzzySet(points=[[382.5, 0.],  [590., 1.]], term="high")
+FS.add_linguistic_variable("BS", LinguisticVariable([F_1, F_2, F_3], concept="BS"))
+
+# Define output crisp values
+FS.set_crisp_output_value("bad", 0)
+FS.set_crisp_output_value("normal", 33)
+FS.set_crisp_output_value("good", 66)
+FS.set_crisp_output_value("excellent", 99)
+
+
+# Define fuzzy rules
+
+R1 = "IF (BS IS high) AND (IV IS high) THEN (Strength IS excellent)"
+R2 = "IF (BS IS high) AND (IV IS low) THEN (Strength IS good)"
+R3 = "IF (BS IS high) AND (IV IS normal) THEN (Strength IS good)"
+R4 = "IF (BS IS low) AND (IV IS high) THEN (Strength IS normal)"
+R5 = "IF (BS IS low) AND (IV IS low) THEN (Strength IS bad)"
+R6 = "IF (BS IS low) AND (IV IS normal) THEN (Strength IS bad)"
+R7 = "IF (BS IS normal) AND (IV IS normal) THEN (Strength IS normal)"
+R8 = "IF (BS IS normal) AND (IV IS low) THEN (Strength IS bad)"
+R9 = "IF (BS IS normal) AND (IV IS high) THEN (Strength IS good)"
+FS.add_rules([R1, R2, R3, R4, R5, R6, R7, R8, R9])
+######################################################
+
+
+
 
 def getAlluniqueWords(rows, wordsInyourLine):
     
@@ -870,7 +912,34 @@ while True:
                    print('It is incorret.') 
                else:
                    print('Sorry I do not know the answer.')
-        
+                   
+                   
+        elif cmd == 37: # Fuzzy logic check that this pokemon is strong
+            while(True):
+                print('Please input the sum of individual values (IVs) of the Pokemon (0 - 186): ')
+                sumOfIV = input()
+                if (int(sumOfIV) <= 186 and int(sumOfIV) >= 0):
+                    break
+                
+            while(True):
+                print('Please input the base states of the Pokemon (175 - 590): ')
+                baseStates = input()
+                if (int(baseStates) >= 175 and int(baseStates) <= 590):
+                    break
+            
+            # Set antecedents values
+            FS.set_variable("IV", sumOfIV)
+            FS.set_variable("BS", baseStates)
+            
+            
+            FS.plot_variable("IV")
+            FS.plot_variable("BS")
+            print('The strength of your Pokemon (0 - Worst ,33 - Normal, 66 - Good, 99 - Best)')
+            # Perform Sugeno inference and print output
+            print(FS.Sugeno_inference(["Strength"]))
+                
+                   
+                   
         elif cmd == 99:
             #If the bot cannot find an answer in aiml, find it on csv with similarity based search
             #Open the csv file
@@ -927,7 +996,7 @@ while True:
         
             
             print("")
-            print("Cosine Similarity of your line with the line on KB accordingly:")
+            print("Cosine Similarity of your question with the qestions on KB:")
             print(cosineSimList)
             
             
@@ -935,11 +1004,11 @@ while True:
             max_value = max(cosineSimList)
             max_index = cosineSimList.index(max_value)
             
-            print("\n\n")
+            print("\n")
             
             #If max value is 0, it means that no similar question is found with your line
             if max_value == 0:
-                print("Sorry, we do not have a similar question in the KB :(")
+                print("Sorry, we cannot find a similar question in the KB.")
             else:
                 print("Your question:", yourLine, ", is similar to:")
                 print(rows[max_index][0])
