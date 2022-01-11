@@ -3,10 +3,14 @@
 """
 Basic chatbot design --- for your own modifications
 """
-#######################################################
-# Initialise Wikipedia agent
-#######################################################
-import wikipedia
+print("Booting...")
+
+# #######################################################
+# # Initialise Wikipedia agent
+# #######################################################
+# import wikipedia
+# #######################################################
+
 
 #######################################################
 # Initialise weather agent
@@ -14,6 +18,9 @@ import wikipedia
 import json, requests
 #insert your personal OpenWeathermap API key here if you have one, and want to use this feature
 APIkey = "5403a1e0442ce1dd18cb1bf7c40e776f" 
+#######################################################
+
+
 
 
 #######################################################
@@ -22,7 +29,10 @@ APIkey = "5403a1e0442ce1dd18cb1bf7c40e776f"
 import speech_recognition
 sr = speech_recognition.Recognizer()
 
-import keyboard
+#import keyboard
+#######################################################
+
+
 
 #######################################################
 #  Initialise NLTK Inference
@@ -33,10 +43,8 @@ import nltk
 read_expr = Expression.fromstring
 #######################################################
 
-
-
 #######################################################
-#  Initialise Knowledgebase. 
+#  Initialise Knowledgebase for logical inference 
 #######################################################
 import pandas
 
@@ -45,6 +53,9 @@ data = pandas.read_csv('pokemonLogic.csv', header=None)
 [kb.append(read_expr(row)) for row in data[0]]
 # >>> ADD SOME CODES here for checking KB integrity (no contradiction), 
 # otherwise show an error message and terminate
+
+#prove NULL in the kb
+#if there is contradiction, it means that there are problems inside the kb
 expr = None
 answer=ResolutionProver().prove(expr, kb, verbose=False)
 if answer:
@@ -79,15 +90,7 @@ def askYN():
         else:
             print("Please respond in yes or no.")
 
-
-#######################################################
-#  TFIDF and Cosine Similarity 
-#######################################################
-import csv
-import math
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
-#######################################################
+######################################################
 
 
 
@@ -98,6 +101,8 @@ import matplotlib.pyplot as plt
 from skimage import io
 
 ######################################################
+
+
 
 ######################################################
 #   simpful fuzzy logic
@@ -124,9 +129,7 @@ FS.set_crisp_output_value("normal", 33)
 FS.set_crisp_output_value("good", 66)
 FS.set_crisp_output_value("excellent", 99)
 
-
 # Define fuzzy rules
-
 R1 = "IF (BS IS high) AND (IV IS high) THEN (Strength IS excellent)"
 R2 = "IF (BS IS high) AND (IV IS low) THEN (Strength IS good)"
 R3 = "IF (BS IS high) AND (IV IS normal) THEN (Strength IS good)"
@@ -142,28 +145,34 @@ FS.add_rules([R1, R2, R3, R4, R5, R6, R7, R8, R9])
 
 
 
+#######################################################
+#  TFIDF and Cosine Similarity 
+#######################################################
+import csv
+import math
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+
 def getAlluniqueWords(rows, wordsInyourLine):
-    
     allWords = []
-    
     for i in range(len(rows)):
         wordsInRow = rows[i][0].split()
         [allWords.append(x) for x in wordsInRow if x not in allWords]
     
     [allWords.append(x) for x in wordsInYourLine if x not in allWords]
     
+        
     #print(allWords)
     return allWords
 
 
-
 def tf_function(wordsInYourLine):
     TFdictionary = {}
-    
     newlist = []
     [newlist.append(x) for x in wordsInYourLine if x not in newlist]
     #print(newlist)
-    
+
     for i in range(len(newlist)):
         counter = 0;
         for j in range(len(wordsInYourLine)):
@@ -244,6 +253,8 @@ def cosineSim_function(list1,list2):
 
 
 
+
+
 #######################################################
 #  Initialise AIML agent
 #######################################################
@@ -259,6 +270,18 @@ kern.setTextEncoding(None)
 kern.bootstrap(learnFiles="mybot-aiml.xml")
 
 #######################################################
+
+print()
+
+
+print("==================================================")
+print("  _____   ____  _  ________ _____  ________   __")
+print(" |  __ \ / __ \| |/ /  ____|  __ \|  ____\ \ / /")
+print(" | |__) | |  | | ' /| |__  | |  | | |__   \ V / ")
+print(" |  ___/| |  | |  < |  __| | |  | |  __|   > <  ")
+print(" | |    | |__| | . \| |____| |__| | |____ / . \ ")
+print(" |_|     \____/|_|\_\______|_____/|______/_/ \_\ ")
+print("==================================================")
 
 
 
@@ -302,9 +325,9 @@ while True:
     else:
         print("Please input 1 or 2.")
         
+        
 
 while True:
-    
     if mode == "text":
         #get user input
         try:
@@ -319,6 +342,7 @@ while True:
 
         while True:
             try:
+                #use microphone and recognize the audio
                 with speech_recognition.Microphone() as mic:
                     sr.adjust_for_ambient_noise(mic, duration=0.2)
                     audio = sr.listen(mic)
@@ -355,6 +379,7 @@ while True:
             if(SCwords[i]!=SCwords2[i]):
                 typoFound = True
         
+        #if there is typo found, ask the user if they meant something
         if(typoFound == True):
             newUserInput = ' '.join(SCwords2)
             print("Did you mean " + newUserInput + "? (y/n)")
@@ -377,33 +402,34 @@ while True:
             print(params[1])
             break
         
-        elif cmd == 1:
-            try:
-                wSummary = wikipedia.summary(params[1], sentences=3,auto_suggest=False)
-                print(wSummary)
-            except:
-                print("Sorry, I do not know that. Be more specific!")
+        # elif cmd == 1:
+        #     try:
+        #         wSummary = wikipedia.summary(params[1], sentences=3,auto_suggest=False)
+        #         print(wSummary)
+        #     except:
+        #         print("Sorry, I do not know that. Be more specific!")
         
-        elif cmd == 2:
-            succeeded = False
-            api_url = r"http://api.openweathermap.org/data/2.5/weather?q="
-            response = requests.get(api_url + params[1] + r"&units=metric&APPID="+APIkey)
-            if response.status_code == 200:
-                response_json = json.loads(response.content)
-                if response_json:
-                    t = response_json['main']['temp']
-                    tmi = response_json['main']['temp_min']
-                    tma = response_json['main']['temp_max']
-                    hum = response_json['main']['humidity']
-                    wsp = response_json['wind']['speed']
-                    wdir = response_json['wind']['deg']
-                    conditions = response_json['weather'][0]['description']
-                    print("The temperature is", t, "°C, varying between", tmi, "and", tma, "at the moment, humidity is", hum, "%, wind speed ", wsp, "m/s,", conditions)
-                    succeeded = True
-            if not succeeded:
-                print("Sorry, I could not resolve the location you gave me.")
+        # elif cmd == 2:
+        #     succeeded = False
+        #     api_url = r"http://api.openweathermap.org/data/2.5/weather?q="
+        #     response = requests.get(api_url + params[1] + r"&units=metric&APPID="+APIkey)
+        #     if response.status_code == 200:
+        #         response_json = json.loads(response.content)
+        #         if response_json:
+        #             t = response_json['main']['temp']
+        #             tmi = response_json['main']['temp_min']
+        #             tma = response_json['main']['temp_max']
+        #             hum = response_json['main']['humidity']
+        #             wsp = response_json['wind']['speed']
+        #             wdir = response_json['wind']['deg']
+        #             conditions = response_json['weather'][0]['description']
+        #             print("The temperature is", t, "°C, varying between", tmi, "and", tma, "at the moment, humidity is", hum, "%, wind speed ", wsp, "m/s,", conditions)
+        #             succeeded = True
+        #     if not succeeded:
+        #         print("Sorry, I could not resolve the location you gave me.")
                 
-        elif cmd == 3:
+        elif cmd == 3: #what is a pokemon
+            
             pokemonToFind = params[1]
             #Open the csv file
             file = open("pokemon.csv")
@@ -431,7 +457,9 @@ while True:
                     print(pokemonDesc)
                     break
                 
-                
+            #if not found in csv directly, it means that there could be typo of the pokemon name
+            #Pokemon names are not in dictionary, so need to have an additional doc to know the correct pokemon names
+            #use nltk edit distance to find the best match
             if(foundInCSV == False):
                 for i in range(len(rows)):    
                     #print(rows[i][0])
@@ -444,7 +472,7 @@ while True:
                     totallyWrong = True
                     
                 
-                
+                #if the pokemon name is not totally wrong, ask the user if the best match is what they want to find
                 if(totallyWrong == False):
                     
                     print("Did you mean the Pokemon " + best_match + "? (y/n)")
@@ -466,6 +494,8 @@ while True:
                 else:
                     print("Sorry, we do not understand what did you mean.")
             
+            
+            #if found the needed pokemon for the user, call the api to get the pokemon image
             if(foundIt):  
                 #print("image part")
                 succeeded = False
@@ -490,6 +520,7 @@ while True:
             file.close()
             
             #check if the user is asking what is the strongest pokemon,etc.
+            #as they both share the same "what is *"
             #use the code from the tfidf part here and screen the QA csv
             if(totallyWrong == True):
                 file = open("QA.csv")
@@ -555,7 +586,7 @@ while True:
                     file.close()
             
             
-        elif cmd == 4:
+        elif cmd == 4: #where to find pokemon
             pokemonToFind = params[1].capitalize() 
             #Open the csv file
             file = open("pokemon.csv")
@@ -615,7 +646,8 @@ while True:
                 else:
                     print("Sorry, we do not understand what did you mean.")
 
-
+            #if found the pokemon which is what the uesr want to know
+            #get the encounter locations of the pokemon for the user from the api
             if(foundIt):  
                 succeeded = False
                 api_url = r"https://pokeapi.co/api/v2/pokemon/"
@@ -653,7 +685,7 @@ while True:
         
             
             
-        elif cmd == 5:
+        elif cmd == 5: #what can pokemon evolve into
             pokemonToFind = params[1].capitalize()
             #Open the csv file
             file = open("pokemon.csv")
@@ -710,7 +742,8 @@ while True:
                 else:
                     print("Sorry, we do not understand what did you mean.")
             
-            
+            #if found the pokemon which is what the user want
+            #call the api and get the evolvution tree of that pokemon
             if(foundIt):  
                 succeeded = False
                 api_url = r"https://pokeapi.co/api/v2/pokemon-species/"
@@ -770,7 +803,7 @@ while True:
                                     
                                 succeeded = True
                         
-                        
+                #if cannot find the pokemon
                 if ((foundIt == True) and (succeeded == False)):
                     print("This pokemon cannot be found in the wild. You can get it by evolving it.")
             
@@ -827,7 +860,7 @@ while True:
                # definite response: either "Incorrect" or "Sorry I don't know." 
                
                
-        elif cmd == 33:
+        elif cmd == 33: #I know that * is not *
             object,subject=params[1].split(' is not ')
             expr=read_expr('-' + subject + '(' + object + ')')
             
@@ -850,7 +883,7 @@ while True:
                     print('OK, I will remember that',object,'is not', subject)
                     kb.append(expr)
                     
-        elif cmd == 34:
+        elif cmd == 34: #I know that * can use *
             object,subject=params[1].split(' can use ')
             expr=read_expr(subject.replace(" ", "") + '(' + object + ')')
             
@@ -873,7 +906,7 @@ while True:
                     print('OK, I will remember that',object,'can use', subject)
                     kb.append(expr)
                     
-        elif cmd == 35:
+        elif cmd == 35: #I know that * cannot use *
             object,subject=params[1].split(' cannot use ')
             expr=read_expr("-"+subject.replace(" ", "") + '(' + object + ')')
             
@@ -896,7 +929,7 @@ while True:
                     print('OK, I will remember that',object,'cant use', subject)
                     kb.append(expr)   
                     
-        elif cmd == 36: # if the input pattern is "check that * is *"
+        elif cmd == 36: # if the input pattern is "check that * cannot use *"
             object,subject=params[1].split(' cannot use ')
             expr=read_expr('-' + subject.replace(" ","") + '(' + object + ')')
             answer=ResolutionProver().prove(expr, kb, verbose=True)
@@ -939,11 +972,14 @@ while True:
             print(FS.Sugeno_inference(["Strength"]))
                 
                    
-                   
-        elif cmd == 99:
+        #go into this if questions are not in aiml
+        elif cmd == 99: #do tfidf and cosine similarity here
             #If the bot cannot find an answer in aiml, find it on csv with similarity based search
+            
             #Open the csv file
             file = open("QA.csv")
+            #file = open("forTesting.csv")
+            
             #Get the rows from the file with the reader
             csvreader = csv.reader(file)
             
