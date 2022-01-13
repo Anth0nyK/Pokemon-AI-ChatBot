@@ -49,6 +49,7 @@ read_expr = Expression.fromstring
 import pandas
 
 kb=[]
+#data = pandas.read_csv('pokemonLogic.csv', header=None)
 data = pandas.read_csv('pokemonLogic.csv', header=None)
 [kb.append(read_expr(row)) for row in data[0]]
 # >>> ADD SOME CODES here for checking KB integrity (no contradiction), 
@@ -814,7 +815,7 @@ while True:
         # Here are the processing of the new logical component:
         elif cmd == 31: # if input pattern is "I know that * is *"
             object,subject=params[1].split(' is ')
-            expr=read_expr(subject + '(' + object + ')')
+            expr=read_expr(subject.replace(" ","") + '(' + object + ')')
             # >>> ADD SOME CODES HERE to make sure expr does not contradict 
             # with the KB before appending, otherwise show an error message.
             
@@ -862,7 +863,7 @@ while True:
                
         elif cmd == 33: #I know that * is not *
             object,subject=params[1].split(' is not ')
-            expr=read_expr('-' + subject + '(' + object + ')')
+            expr=read_expr('-' + subject.replace(" ","") + '(' + object + ')')
             
             print('Checking if it contradicts with the KB')
             kbTemp = kb.copy()

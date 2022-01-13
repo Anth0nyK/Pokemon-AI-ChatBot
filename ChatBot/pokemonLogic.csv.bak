@@ -15,4 +15,7 @@ FlyingType(x) -> FlyingMove(x)
 PsychicType(x) -> PsychicMove(x)
 BugType(x) -> BugMove(x)
 RockType(x) -> RockMove(x)
-GhostType(x) -> GhostMove(x) 
+GhostType(x) -> GhostMove(x)  
+
+FireType(a)
+-FireType(a)
