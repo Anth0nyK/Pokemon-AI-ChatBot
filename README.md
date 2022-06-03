@@ -26,6 +26,10 @@ This project is a text-based chatbot built using Python with some Natural Langua
 - **API** (pokeapi.co)
 - **Fuzzy logic** (TSK) for classifying a Pokémon
 
+- **Convolutional Neural Network** (CNN) for training image classification model locally
+- **Yolov5** for training object detection model locally
+- **Azure Custom Vision** for training image classification model in Cloud
+
 </br>
 
 #### Features showcase in conversation log
