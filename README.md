@@ -42,6 +42,7 @@ This project is a text-based chatbot built using Python with some Natural Langua
 
 
 <p align="center">
+  <h4>NLP and Knowledge part</h4>
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/1.png" width="750">
   
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/2.png" width="700">
@@ -61,6 +62,36 @@ This project is a text-based chatbot built using Python with some Natural Langua
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/9.JPG" width="700">
   
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/10.JPG" width="700">
+  
+  
+  </br>
+  </br>
+  <h4>Image processing AI part</h4>
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/20.JPG" width="600">
+  
+  </br></br>
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/21.JPG" width="600">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/22.JPG" width="600">
+  
+  
+   </br></br>
+   
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/23.JPG" width="600">
+  
+   </br></br>
+   
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/24.JPG" width="600">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/25.JPG" width="600">
+  
+   </br></br>
+   
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/26.JPG" width="600">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/27.JPG" width="600">
+  
   
 </p>
 
