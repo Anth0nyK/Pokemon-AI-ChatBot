@@ -1,5 +1,11 @@
 # Pokémon (Generation 1 Pokédex) Chatbot
 
+</br>
+<p align="center">
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/pokedex-pro.png" width="250">
+</p>
+</br>
+
 This project is a text-based Pokémon chatbot which can answer questions related to the Pokémon in Gen 1. Besides answering questions, this chatbot can also perform image classification and object detection to help the users identify Pokémon just like the Pokédex in the Pokémon world... 
 
 ---
@@ -36,7 +42,26 @@ This project is a text-based chatbot built using Python with some Natural Langua
 
 
 <p align="center">
-  <img src="https://github.com/Anth0nyK/Online-Marketplace-Application/blob/main/README_Images/1.png" width="250">
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/1.png" width="750">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/2.png" width="700">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/3.png" width="700">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/4.png" width="700">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/5.JPG" width="700">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/6.JPG" width="700">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/7.JPG" width="700">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/8.JPG" width="700">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/9.JPG" width="700">
+  
+  <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/10.JPG" width="700">
+  
 </p>
 
 [Back To The Top](#table-of-contents)
@@ -48,10 +73,8 @@ This project is a text-based chatbot built using Python with some Natural Langua
 #### Installation
 
 ```
-git clone https://github.com/Anth0nyK/Online-Marketplace-Application.git marketplace
-cd marketplace
+git clone https://github.com/Anth0nyK/AI-ChatBot.git pokedex
 
-flutter run
 ```
 
 
