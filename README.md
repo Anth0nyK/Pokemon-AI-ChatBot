@@ -72,28 +72,41 @@ This project is a text-based chatbot built using Python with some Natural Langua
   
   <p align="center">
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/20.JPG" width="600">
-  
+  </p>
   </br></br>
   
+  <p align="center">
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/21.JPG" width="600">
+  </p>
   
+  <p align="center">
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/22.JPG" width="600">
-  
+  </p>
   
    </br></br>
    
+ <p align="center">
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/23.JPG" width="600">
+  </p>
   
    </br></br>
-   
+  
+  <p align="center">
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/24.JPG" width="600">
+  </p>
   
+  <p align="center">
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/25.JPG" width="600">
+  </p>
+  
   
    </br></br>
    
+   <p align="center">
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/26.JPG" width="600">
+  </p>
   
+  <p align="center">
   <img src="https://github.com/Anth0nyK/AI-ChatBot/blob/main/Readme_Images/27.JPG" width="600">
   </p>
   
