@@ -13,7 +13,7 @@ This project is a text-based Pokémon chatbot which can answer questions related
 ### Table of Contents
 - [Description](#description)
 - [How To Use](#how-to-use)
-
+- [Credits](#credits)
 ---
 
 ## Description
@@ -129,3 +129,13 @@ git clone https://github.com/Anth0nyK/AI-ChatBot.git pokedex
 
 
 [Back To The Top](#table-of-contents)
+
+---
+
+## Credits
+
+[Anthony](https://github.com/Anth0nyK)
+[Jason](https://github.com/jasonyiu9981)
+
+
+
