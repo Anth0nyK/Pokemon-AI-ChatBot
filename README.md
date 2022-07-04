@@ -135,7 +135,10 @@ git clone https://github.com/Anth0nyK/AI-ChatBot.git pokedex
 ## Credits
 
 [Anthony](https://github.com/Anth0nyK)
+<br>
 [Jason](https://github.com/jasonyiu9981)
+
+[Back To The Top](#table-of-contents)
 
 
 
